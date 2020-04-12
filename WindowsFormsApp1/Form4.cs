@@ -13,7 +13,7 @@ namespace WindowsFormsApp1
 {
     public partial class Form4 : Form
     {
-        private const string Conn = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=c:\\users\\dell\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\Database1.mdf;Integrated Security=True";
+        private const string Conn = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=c:\\users\\dell\\source\\repos\\WindowsFormsApp1 - Copy\\WindowsFormsApp1\\Database1.mdf;Integrated Security=True";
         public Form4()
         {
             InitializeComponent();
@@ -30,11 +30,21 @@ namespace WindowsFormsApp1
             String k = textBox1.Text;
             String s = textBox2.Text;
             String u = textBox3.Text;
+            String b = textBox4.Text;
+            String l = textBox5.Text;
+            String q = textBox6.Text;
+            String a = textBox7.Text;
+            int t = 0;
             if (u == s)
             {
-                SqlCommand cmd6 = new SqlCommand("insert into USERNAME(username,password) values(@us,@ps)", con);
+                SqlCommand cmd6 = new SqlCommand("insert into USERNAME(username,password,phone,trips,fname,lname,area) values(@us,@ps,@ph,@tr,@fn,@ln,@ar)", con);
                 cmd6.Parameters.AddWithValue("us", k);
                 cmd6.Parameters.AddWithValue("ps", s);
+                cmd6.Parameters.AddWithValue("ph", q);
+                cmd6.Parameters.AddWithValue("tr", t);
+                cmd6.Parameters.AddWithValue("fn", b);
+                cmd6.Parameters.AddWithValue("ln", l);
+                cmd6.Parameters.AddWithValue("ar", a);
                 con.Open();
                 int i = cmd6.ExecuteNonQuery();
                 con.Close();

@@ -17,8 +17,11 @@ namespace WindowsFormsApp1
         public static int initialnumber;
         public static float initialrate;
         public static string cab;
+        public static float f;
+        public static int routeid;
         string[] area = new string[10];
-        private const string Conn = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=c:\\users\\dell\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\Database1.mdf;Integrated Security=True";
+        public static string areaname1, areaname2;
+        private const string Conn = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=c:\\users\\dell\\source\\repos\\WindowsFormsApp1 - Copy\\WindowsFormsApp1\\Database1.mdf;Integrated Security=True";
         public Form2()
         {
             InitializeComponent();
@@ -31,12 +34,12 @@ namespace WindowsFormsApp1
 
             while (reader.Read())
             {
-    
+
                 area[j] = reader.GetString(0);
                 j++;
             }
             int i = 0;
-            while(i<=j)
+            while (i <= j)
             {
                 if (area[i] != null)
                 {
@@ -60,20 +63,21 @@ namespace WindowsFormsApp1
 
         private void label1_Click_1(object sender, EventArgs e)
         {
-            
+
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            comboBox4.Items.Clear();
             Form1 f1 = new Form1();
             string s = Form1.s;
             SqlConnection con = new SqlConnection(Conn);
-            SqlCommand cmd = new SqlCommand("select * from FARE where AREANAME1=@ar1 and AREANAME2=@ar2 union select * from FARE where AREANAME1=@ar2 and AREANAME2=@ar1",con);
+            SqlCommand cmd = new SqlCommand("select * from FARE where AREANAME1=@ar1 and AREANAME2=@ar2 union select * from FARE where AREANAME1=@ar2 and AREANAME2=@ar1", con);
             cmd.Parameters.AddWithValue("@ar1", comboBox1.Text);
             cmd.Parameters.AddWithValue("@ar2", comboBox2.Text);
             con.Open();
@@ -89,7 +93,7 @@ namespace WindowsFormsApp1
             SqlCommand cmd5 = new SqlCommand("select * from USERNAME where username=@user", con);
             cmd5.Parameters.AddWithValue("user", s);
             SqlDataReader reader2 = cmd5.ExecuteReader();
-            while(reader2.Read())
+            while (reader2.Read())
             {
                 m = reader2.GetInt32(3);
             }
@@ -98,17 +102,18 @@ namespace WindowsFormsApp1
             SqlCommand cmd6 = new SqlCommand("select * from DISCOUNT where @m>TRIPS", con);
             cmd6.Parameters.AddWithValue("m", m);
             SqlDataReader reader4 = cmd6.ExecuteReader();
-            int r=0;
-            while(reader4.Read())
+            int r = 0;
+            while (reader4.Read())
             {
                 r = reader4.GetInt32(1);
             }
             con.Close();
-            float f = n - (((float)r) / 100) * ((float)n);
+            f = n - (((float)r) / 100) * ((float)n);
             label1.Text = f.ToString();
+            label1.Show();
             float k = float.Parse(comboBox3.Text);
             con.Open();
-            SqlCommand cmd2 = new SqlCommand("select *  from DRIVER where AREA=@ar3 and RATING>@ra", con);
+            SqlCommand cmd2 = new SqlCommand("select DNAME,RATING,NAME from DRIVER,CAR where AREA=@ar3 and RATING>@ra and CAR=NUMBER", con);
             cmd2.Parameters.AddWithValue("@ar3", comboBox1.Text);
             cmd2.Parameters.AddWithValue("@ra", k);
             SqlDataAdapter adap = new SqlDataAdapter(cmd2);
@@ -126,7 +131,7 @@ namespace WindowsFormsApp1
                 comboBox4.Items.Add(reader1.GetString(1));
 
             }
-            
+
             con.Close();
         }
 
@@ -145,15 +150,55 @@ namespace WindowsFormsApp1
             cab = comboBox4.Text;
             SqlConnection con = new SqlConnection(Conn);
             SqlCommand cmd = new SqlCommand("update USERNAME set trips=@t where username=@name", con);
-            cmd.Parameters.AddWithValue("t",m+1);
-            cmd.Parameters.AddWithValue("name",Form1.s);
+            cmd.Parameters.AddWithValue("t", m + 1);
+            cmd.Parameters.AddWithValue("name", Form1.s);
             con.Open();
             int i = cmd.ExecuteNonQuery();
             con.Close();
+            areaname1 = comboBox1.Text;
+            areaname2 = comboBox2.Text;
             this.Hide();
             Form3 f3 = new Form3();
             f3.ShowDialog();
         }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            Form5 f5 = new Form5();
+            f5.ShowDialog();
+
+        }
+
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox4_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection(Conn);
+            con.Open();
+            SqlCommand cmd3 = new SqlCommand("select PHNO,CAR from DRIVER where DNAME=@ar4", con);
+            cmd3.Parameters.AddWithValue("@ar4", comboBox4.Text);
+            SqlDataReader reader1 = cmd3.ExecuteReader();
+            while (reader1.Read())
+            {
+                label7.Text = reader1.GetString(1);
+                label8.Text = reader1.GetString(0);
+            }
+            label7.Show();
+            label8.Show();
+            con.Close();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Form5 f5 = new Form5();
+            f5.ShowDialog();
+        }
     }
-    }
+}
+
+
 

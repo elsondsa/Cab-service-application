@@ -13,9 +13,9 @@ namespace WindowsFormsApp1
 {
     public partial class Form3 : Form
     {
-        private const string Conn = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=c:\\users\\dell\\source\\repos\\WindowsFormsApp1\\WindowsFormsApp1\\Database1.mdf;Integrated Security=True";
+        private const string Conn = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=c:\\users\\dell\\source\\repos\\WindowsFormsApp1 - Copy\\WindowsFormsApp1\\Database1.mdf;Integrated Security=True";
         double netrate;
-        int rate=0;
+        int rate = 0;
         double initialrate;
         int initialnumber;
         string cab;
@@ -50,7 +50,28 @@ namespace WindowsFormsApp1
             int i = cmd.ExecuteNonQuery();
             con.Close();
             if (i != 0)
-                MessageBox.Show(i + " Data saved " + rate);
+                MessageBox.Show("RATE SAVED SUCCESSFULLY, HOPE YOU ENJOYED THE TRIP");
+            SqlCommand cmd7 = new SqlCommand("select tid from BookingDetails", con);
+            con.Open();
+            SqlDataReader reader = cmd7.ExecuteReader();
+            //Connection open here
+            int tid = 0;
+            while (reader.Read())
+            {
+                tid = reader.GetInt32(0);
+            }
+            tid = tid + 1;
+            con.Close();
+            SqlCommand cmd6 = new SqlCommand("insert into BookingDetails(tid,username,drivername,areaname1,areaname2,fare) values(@qs,@us,@ps,@ph,@an,@fn)", con);
+            cmd6.Parameters.AddWithValue("qs", tid);
+            cmd6.Parameters.AddWithValue("us", Form1.s);
+            cmd6.Parameters.AddWithValue("ps", Form2.cab);
+            cmd6.Parameters.AddWithValue("ph", Form2.areaname1);
+            cmd6.Parameters.AddWithValue("an", Form2.areaname2);
+            cmd6.Parameters.AddWithValue("fn", Form2.f);
+            con.Open();
+            i = cmd6.ExecuteNonQuery();
+            con.Close();
         }
 
         private void Form3_Load(object sender, EventArgs e)
