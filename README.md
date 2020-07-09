@@ -2,11 +2,16 @@
 
 A simple cab service application by using Database and Microsoft Visual Studio.
 
-## Technologies used
+### Technologies used
 
 MySQL is used as the database.
 C# is the programming language used.
 
-## How it works?
+### Installation
 
 Install visual studio and run the above code.
+
+### Database used
+
+MySQL Server is used as the database for the project. 
+
